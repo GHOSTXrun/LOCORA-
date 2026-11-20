@@ -313,3 +313,6 @@ html.js main .reveal.is-in .wrap {
   .site-header:has(.wallet-trigger--nav) .wordmark .mark { width: 24px; height: 24px; }
   .site-header:has(.wallet-trigger--nav) .btn-small { padding-inline: 7px; }
 }
+
+.locora-ca:enabled { cursor: pointer; }
+.locora-ca:enabled:hover { border-color: var(--locora-orange); }

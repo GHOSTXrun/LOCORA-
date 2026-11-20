@@ -200,3 +200,29 @@
 }
 .locora-ca strong { color: #ff9c70; }
 .locora-ca:disabled { cursor: default; }
+
+.locora-proof-flow {
+ padding-block: clamp(55px, 8vw, 120px);
+ border-block: 1px solid var(--rule-2);
+ background: var(--locora-black);
+ scroll-margin-top: 72px;
+}
+.locora-proof-flow__head { margin-bottom: clamp(22px, 4vw, 42px); }
+.locora-proof-flow__head h2 { font-size: clamp(2.5rem, 5.2vw, 5.25rem); line-height: 1; }
+.locora-proof-flow__head em { color: var(--locora-orange); font-style: normal; }
+.locora-proof-flow__head p { margin-top: 10px; color: var(--ink-2); }
+.locora-proof-flow__grid { display: grid; grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); gap: clamp(22px, 4vw, 52px); align-items: start; }
+.locora-proof-flow__photo img { display: block; width: 100%; height: auto; border-radius: 12px; }
+.locora-proof-flow__photo figcaption { margin-top: 8px; color: var(--mute); font-size: .875rem; }
+.locora-proof-flow__photo a { text-decoration: underline; }
+.locora-proof-flow__steps { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
+.locora-proof-flow__steps li, .locora-proof-flow__tool { border: 1px solid var(--rule-2); border-radius: 11px; background: var(--bg-2); padding: clamp(14px, 2vw, 23px); }
+.locora-proof-flow__steps h3, .locora-proof-flow__tool h3 { font-size: 1.1rem; color: var(--locora-cream); }
+.locora-proof-flow__steps p, .locora-proof-flow__tool p { margin-top: 6px; color: var(--ink-2); }
+.locora-proof-flow__tool { margin-top: clamp(18px, 4vw, 42px); }
+.locora-proof-flow__inputs { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 14px; }
+.locora-proof-flow__upload { display: grid; gap: 5px; max-width: 100%; font-size: .9rem; }
+.locora-proof-flow__upload input { max-width: 100%; }
+.locora-proof-flow output { display: block; margin-top: 10px; font-family: var(--mono); overflow-wrap: anywhere; }
+@media (max-width: 760px) { .locora-proof-flow__grid { grid-template-columns: 1fr; } }
+@media (max-width: 420px) { .locora-proof-flow__steps { grid-template-columns: 1fr; } }

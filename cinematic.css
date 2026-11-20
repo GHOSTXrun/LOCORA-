@@ -1,0 +1,12 @@
+.world__sticky {
+  background: radial-gradient(ellipse at 76% 44%, #211711 0, #120f0d 38%, #0d0c0b 73%);
+}
+.world__canvas:focus-visible { outline: 1px solid #ff9161; outline-offset: -4px; }
+@media (min-width: 1050px) {
+  .hero__copy { max-width: clamp(590px, 48vw, 845px); }
+  .hero__copy h1 { line-height: .92; }
+  .hero__copy .lede { text-wrap: pretty; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero__copy h1 .line__in { transform: none; animation: none; }
+}

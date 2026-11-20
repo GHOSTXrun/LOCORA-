@@ -266,3 +266,8 @@ html.js main .reveal.is-in .wrap {
   transform: none;
   transition: none;
 }
+
+#agents .session__lines .line__text { white-space: pre-wrap; overflow-wrap: anywhere; }
+#agents .session__lines { height: auto; min-height: 0; }
+#agents [data-session-replay] { color: #ffab7e; }
+#agents [data-session-replay]:hover { color: var(--locora-cream); }

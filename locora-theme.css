@@ -258,3 +258,11 @@
 .proof-rehearsal__kv dt { color: var(--mute); }
 .proof-rehearsal__kv dd { color: #ffb284; font-variant-numeric: tabular-nums; }
 .proof-rehearsal > a { margin-top: 7px; }
+
+/* Home content must stay visible even if the archived entrance observer cannot run. */
+html.js main .reveal:not(.is-in) .wrap,
+html.js main .reveal.is-in .wrap {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}

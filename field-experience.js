@@ -16,7 +16,7 @@
     queued = false;
     if (!ready) return;
     const distance = Math.max(intro.offsetHeight - innerHeight, 1);
-    const fraction = Math.max(0, Math.min(1, -intro.getBoundingClientRect().top / distance));
+    const fraction = document.querySelector('.times-square-canvas') ? 0 : Math.max(0, Math.min(1, -intro.getBoundingClientRect().top / distance));
     const blend = Math.max(0, Math.min(1, (fraction - .35) / .53));
     const smooth = blend * blend * (3 - 2 * blend);
     const city = motion.matches ? Number(blend >= .5) : smooth;

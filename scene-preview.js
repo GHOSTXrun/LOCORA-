@@ -1,5 +1,5 @@
 (() => {
-  const canvas = document.querySelector('.world__canvas');
+  const canvas = document.querySelector('.times-square-canvas') || document.querySelector('.world__canvas');
   const ctx = canvas?.getContext('2d');
   if (!ctx) return;
 

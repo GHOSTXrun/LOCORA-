@@ -41,6 +41,12 @@
       window.prompt('Copy the LOCORA contract address', address);
     }
   });
+  const embedded = document.querySelector('.locora-ca')?.dataset.contractAddress;
+  if (validSolanaAddress(embedded)) {
+    address = embedded;
+    feedback = `${address.slice(0, 6)}…${address.slice(-5)}`;
+    draw();
+  }
   fetch(file, {cache:'no-store'})
     .then(response => response.ok ? response.json() : null)
     .then(config => {

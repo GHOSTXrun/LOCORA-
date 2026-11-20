@@ -6,8 +6,8 @@
   const select=document.querySelector('#cities');
   const hero = panel.hasAttribute('data-hero');
   let ready = false;
-  const brandPin = hero ? new Image() : null;
-  if (brandPin) brandPin.src = new URL('./locora-brand.png', location.href).href;
+  const brandPin = new Image();
+  brandPin.src = new URL('./locora-brand.png', document.currentScript.src).href;
   let scrollAngle = 0;
   let scrollTarget = 0;
   if (hero) window.addEventListener('message', event => {
@@ -114,8 +114,8 @@
     });
   }
   const spin=document.querySelector('#spin');
-  function spinState(){spin.textContent=paused?'Play rotation':'Pause rotation';spin.setAttribute('aria-pressed',String(!paused));}
-  spin.addEventListener('click',()=>{paused=!paused;spinState()});spinState();
+  function spinState(){if(!spin)return;spin.textContent=paused?'Play rotation':'Pause rotation';spin.setAttribute('aria-pressed',String(!paused));}
+  spin?.addEventListener('click',()=>{paused=!paused;spinState()});spinState();
   reduced.addEventListener('change',()=>{paused=reduced.matches;spinState()});
   canvas.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY};canvas.setPointerCapture(e.pointerId)});
   canvas.addEventListener('pointermove',e=>{
@@ -142,7 +142,9 @@
     if(e.key==='ArrowLeft')yaw-=.16;if(e.key==='ArrowRight')yaw+=.16;
     if(e.key==='ArrowUp')pitch=Math.max(-1,pitch-.12);if(e.key==='ArrowDown')pitch=Math.min(1,pitch+.12);
   });
-  focusCity(0,false);
+  const requestedCity = hero ? null : new URLSearchParams(location.search).get('city');
+  const initialCity = tasks.findIndex(([city]) => city === requestedCity);
+  focusCity(Math.max(initialCity, 0), initialCity >= 0);
   let lastDraw = 0;
   function frame(time){
     requestAnimationFrame(frame);

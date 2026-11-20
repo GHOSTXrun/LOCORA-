@@ -180,3 +180,23 @@
 .brand-globe-mark:hover .globe-reward,
 .brand-globe-mark:focus-visible .globe-reward { background: var(--locora-orange); color: var(--locora-black); }
 .brand-globe-mark:focus-visible { outline: 2px solid var(--locora-cream); outline-offset: 3px; }
+
+.locora-hero-badges { display: flex; align-items: center; gap: clamp(12px, 2vw, 22px); margin-bottom: clamp(13px, 2.2vh, 23px); }
+.locora-hero-badges .locora-disc { flex: none; margin: 0; }
+.locora-ca {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(10px, 1.25vw, 17px);
+  min-height: 51px;
+  border: 1px solid #ff742a9c;
+  border-radius: 999px;
+  padding: 9px clamp(14px, 2vw, 23px);
+  background: #2c160d;
+  color: var(--locora-cream);
+  font: 700 clamp(1rem, 1.3vw, 1.35rem)/1 var(--mono, ui-monospace, monospace);
+  letter-spacing: .045em;
+  white-space: nowrap;
+  opacity: 1;
+}
+.locora-ca strong { color: #ff9c70; }
+.locora-ca:disabled { cursor: default; }

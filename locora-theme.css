@@ -94,3 +94,9 @@
 @media (prefers-reduced-motion: reduce) {
   .locora-disc:not([data-motion="on"]) .locora-disc-face { animation-play-state: paused; }
 }
+
+/* Rotate the archived globe and its pins together while preserving the original artwork. */
+.world__sticky:not(:has(.dive-map.is-ready))::after,
+.world__sticky .brand-globe-markers {
+  transform: translate(-50%, -50%) rotate(var(--locora-globe-roll, 0deg));
+}

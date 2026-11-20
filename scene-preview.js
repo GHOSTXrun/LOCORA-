@@ -33,6 +33,40 @@
     }
   }
 
+  const steps = [
+    [
+      "An agent asks for a street photo.",
+      "The sample request asks how crowded Times Square is and sets a 1.50 USDC reward."
+    ],
+    [
+      "Someone nearby sees the request.",
+      "A contributor reads the question, reward and required location before reserving the task."
+    ],
+    [
+      "The contributor walks to the location.",
+      "The distance to the requested spot matters. An answer from outside the allowed radius would be rejected."
+    ],
+    [
+      "They capture a fresh photo.",
+      "The contributor frames the public plaza so the agent can see how busy it is."
+    ],
+    [
+      "The evidence is checked.",
+      "The production flow checks the recorded location and time, the photo fingerprint and the proof signature."
+    ],
+    [
+      "The payout step concludes the demo.",
+      "In production, an accepted answer releases the bounty from escrow. This replay makes no payment."
+    ]
+  ];
+  const story = document.querySelector('.story');
+  const stepItems = [...(story?.querySelectorAll('.story__steps li') || [])];
+  const storyTitle = story?.querySelector('.story__text h2');
+  const storyDescription = story?.querySelector('.story__text p');
+  const storyRail = story?.querySelector('.story__fill');
+  const originalStory = [storyTitle?.textContent, storyDescription?.textContent];
+  let progress = 0;
+  let current = -2;
   let angle = -.68;
   let drag;
   let frame;
@@ -112,6 +146,13 @@
       polygon(roof, '#211e1a', '#3a3028');
     }
 
+    if (progress > 0) {
+      const traveler = project(-58 + 53 * Math.min(progress * 2.5, 1), 28 - 26 * Math.min(progress * 2.5, 1), 2);
+      ctx.fillStyle = '#f9dbad';
+      ctx.beginPath();
+      ctx.arc(traveler[0], traveler[1], 2.5 * scale, 0, Math.PI * 2);
+      ctx.fill();
+    }
     const marker = project(-5, 2, 1);
     ctx.strokeStyle = '#ff6937';
     ctx.lineWidth = 1.5;
@@ -171,6 +212,28 @@
     previous = time;
     if (!motion.matches) setTimeout(() => requestAnimationFrame(rotate), 76);
   }
+  function updateStory() {
+    if (!story || !storyTitle || !storyDescription || !storyRail) return;
+    const top = story.getBoundingClientRect().top;
+    const travel = Math.max(story.offsetHeight - window.innerHeight, 1);
+    progress = Math.max(0, Math.min(-top / travel, 1));
+    const next = top > 1 ? -1 : Math.min(Math.floor(progress * steps.length), steps.length - 1);
+    if (next !== current) {
+      [storyTitle.textContent, storyDescription.textContent] = steps[next] || originalStory;
+      stepItems.forEach((item, index) => {
+        item.classList.toggle('is-on', index === next);
+        item.classList.toggle('is-done', index < next);
+        if (index === next) item.setAttribute('aria-current', 'step');
+        else item.removeAttribute('aria-current');
+      });
+      current = next;
+    }
+    storyRail.style.transform = `scaleY(${progress})`;
+    invalidate();
+  }
+  window.addEventListener('scroll', updateStory, {passive: true});
+  window.addEventListener('resize', updateStory);
+  updateStory();
   resize();
   if (!motion.matches) requestAnimationFrame(rotate);
   motion.addEventListener('change', () => {

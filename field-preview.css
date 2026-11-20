@@ -1,0 +1,72 @@
+@font-face {
+  font-family: Newsreader;
+  src: url("./_next/static/media/newsreader-s.p.0op912u62qdhl.woff2") format("woff2");
+  font-display: swap;
+}
+.field-map {
+  color-scheme: dark;
+  --field-ink: #f5eee4;
+  --field-muted: #b9ada1;
+  --field-accent: #ff844c;
+  --field-border: #3e332b;
+  background: #0d0c0b;
+  color: var(--field-ink);
+  font: 16px/1.5 system-ui, sans-serif;
+  margin: 0;
+}
+.field-map * { box-sizing: border-box; }
+.field-map a { color: inherit; }
+.field-map :focus-visible, .field-proof :focus-visible { outline: 2px solid #ff9c70; outline-offset: 4px; }
+.field-header, .field-map main { padding-inline: clamp(16px, 4vw, 64px); }
+.field-header {
+  min-height: 68px;
+  border-bottom: 1px solid var(--field-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.field-brand { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; font: 25px Newsreader, Georgia, serif; }
+.field-header a { text-decoration: none; }
+.field-header nav { display: flex; align-items: center; flex-wrap: wrap; gap: clamp(12px, 2vw, 28px); font-size: .875rem; }
+.field-header nav a { color: var(--field-muted); }
+.field-header nav a:hover, .field-header nav a[aria-current] { color: var(--field-ink); }
+.field-map main { max-width: 1540px; margin: 0 auto; padding-block: clamp(24px, 5vw, 64px) 56px; }
+.field-heading > p { margin: 0; color: var(--field-muted); }
+.field-heading > p:first-child { color: var(--field-accent); font-size: .875rem; }
+.field-heading h1 { margin: 10px 0 12px; font: 400 clamp(2.7rem, 6.4vw, 6rem)/.94 Newsreader, Georgia, serif; letter-spacing: -.045em; }
+.field-heading h1 em { color: var(--field-accent); font-style: normal; }
+.field-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(270px, 340px); gap: 16px; margin-top: 28px; }
+.field-stage, .field-request { position: relative; border: 1px solid var(--field-border); border-radius: 18px; overflow: hidden; }
+.field-stage { min-height: clamp(400px, 58vh, 660px); background: radial-gradient(ellipse at center, #24262a, #101114 62%, #0a0b0d 100%); }
+.field-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: grab; touch-action: pan-y; }
+.field-stage canvas:active { cursor: grabbing; }
+.field-stage canvas:focus-visible { outline-offset: -4px; }
+.field-toolbar { position: absolute; z-index: 1; inset: 12px 12px auto; display: flex; flex-wrap: wrap; gap: 6px; pointer-events: none; }
+.field-map button, .field-map select { font: inherit; color: var(--field-ink); background: #1a1716; border: 1px solid #54453a; border-radius: 8px; padding: 7px 10px; }
+.field-map button { cursor: pointer; pointer-events: auto; font-size: .875rem; }
+.field-map button:hover, .field-map button[aria-pressed="true"] { border-color: var(--field-accent); }
+.field-coordinates { position: absolute; margin: 0; bottom: 12px; left: 14px; pointer-events: none; color: var(--field-muted); font: .8125rem ui-monospace, monospace; }
+.field-request { display: flex; flex-direction: column; background: #151210; padding: clamp(16px, 2.2vw, 30px); }
+.field-label { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; color: var(--field-accent); font-size: .875rem; font-weight: 650; margin: 0 0 25px; }
+.field-request label { font-size: .875rem; margin-bottom: 6px; }
+.field-request select { width: 100%; }
+.field-description { margin: 22px 0; }
+.field-description h2 { margin: 8px 0 10px; font: 400 clamp(1.75rem, 3vw, 2.4rem)/1.04 Newsreader, Georgia, serif; }
+.field-description p { margin: 0; color: var(--field-muted); }
+.field-description #city { color: var(--field-accent); font-size: .875rem; }
+.field-note { margin: auto 0 0; padding-top: 14px; border-top: 1px solid var(--field-border); color: var(--field-muted); font-size: .875rem; }
+.field-proof { padding: clamp(18px, 4vw, 32px); margin-block: 24px; background: #171310; border: 1px solid #443329; border-radius: 14px; color: #f5eee4; }
+.field-proof h3 { margin: 0 0 8px; }
+.field-proof p, .field-proof label { color: #d0c2b5; }
+.field-proof input { display: block; margin: 7px 0 14px; max-width: 100%; }
+.field-proof output { display: block; font-family: ui-monospace, monospace; overflow-wrap: anywhere; }
+@media (max-width: 760px) {
+  .field-grid { grid-template-columns: 1fr; }
+  .field-stage { min-height: clamp(305px, 55svh, 520px); }
+  .field-brand { font-size: 20px; }
+  .field-header nav { gap: 9px; font-size: .8125rem; }
+}
+@media (max-width: 390px) {
+  .field-header nav a:first-child { display: none; }
+}

@@ -271,3 +271,45 @@ html.js main .reveal.is-in .wrap {
 #agents .session__lines { height: auto; min-height: 0; }
 #agents [data-session-replay] { color: #ffab7e; }
 #agents [data-session-replay]:hover { color: var(--locora-cream); }
+
+.wallet-trigger { white-space: nowrap; border-color: #ff742a8a; color: var(--locora-cream); }
+.wallet-trigger:hover { border-color: var(--locora-orange); background: #ff590b16; }
+.wallet-trigger[data-connected="true"] { color: #ffab7e; }
+.locora-wallet {
+  width: min(420px, calc(100% - 28px));
+  margin: auto;
+  padding: 22px;
+  background: #17110e;
+  color: var(--locora-cream);
+  border: 1px solid #ff742a80;
+  border-radius: 16px;
+}
+.locora-wallet::backdrop { background: #050302bb; }
+.locora-wallet__titlebar { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.locora-wallet h2 { font-size: 1.6rem; }
+.locora-wallet__close { width: 36px; height: 36px; padding: 0; }
+.locora-wallet__choices { margin-top: 15px; display: grid; gap: 8px; }
+.locora-wallet__choice {
+  display: flex; width: 100%; align-items: center; gap: 10px; text-align: left;
+  padding: 11px 13px; border: 1px solid #faf1dc30; border-radius: 10px; background: #211710;
+  font: 650 1rem/1.25 system-ui, sans-serif; color: var(--locora-cream); cursor: pointer;
+}
+.locora-wallet__choice:hover:not(:disabled) { border-color: var(--locora-orange); }
+.locora-wallet__choice:disabled { opacity: .62; cursor: wait; }
+.locora-wallet__choice img { width: 25px; height: 25px; object-fit: contain; }
+.locora-wallet__install, .locora-wallet__status { min-height: 1.4em; margin-top: 10px; color: var(--ink-2); font-size: .9rem; overflow-wrap: anywhere; }
+.locora-wallet__install a { color: #ffab7e; text-decoration: underline; }
+.locora-wallet__disconnect { margin-top: 10px; }
+.locora-wallet [hidden] { display: none; }
+@media(max-width: 760px) {
+  .site-header:has(.wallet-trigger--nav) { gap: 8px; }
+  .wallet-trigger--nav { padding-inline: 9px; }
+  .wallet-trigger--nav .wallet-trigger__label { display: none; }
+  .wallet-trigger--nav::after { content: "Wallet"; }
+  .wallet-trigger--nav[data-connected="true"]::after { content: "Wallet ✓"; }
+}
+@media(max-width: 380px) {
+  .site-header:has(.wallet-trigger--nav) .wordmark { font-size: 16px; gap: 4px; }
+  .site-header:has(.wallet-trigger--nav) .wordmark .mark { width: 24px; height: 24px; }
+  .site-header:has(.wallet-trigger--nav) .btn-small { padding-inline: 7px; }
+}

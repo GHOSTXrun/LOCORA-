@@ -6,6 +6,13 @@
   const select=document.querySelector('#cities');
   const hero = panel.hasAttribute('data-hero');
   let ready = false;
+  let scrollAngle = 0;
+  let scrollTarget = 0;
+  if (hero) window.addEventListener('message', event => {
+    const data = event.data;
+    if (event.origin !== location.origin || event.source !== parent || data?.type !== 'locora-globe-scroll' || !Number.isFinite(data.progress)) return;
+    scrollTarget = Math.max(0, Math.min(1, data.progress)) * Math.PI * 1.45;
+  });
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   const radians=Math.PI/180, tau=2*Math.PI;
   let width=0,height=0,dpr=1,yaw=(hero?-42:120)*radians,pitch=(hero?23:12)*radians,morph=0,target=0,selected=0,drag=null,paused=reduced.matches,last=0,visible=true;
@@ -92,7 +99,7 @@
     document.querySelector('#detail').textContent=detail;
     document.querySelector('#amount').textContent=amount.toFixed(2)+' USDC';
     document.querySelector('#coordinates').textContent=Math.abs(lat).toFixed(2)+'° '+(lat>=0?'N':'S')+' / '+Math.abs(lon).toFixed(2)+'° '+(lon>=0?'E':'W');
-    if(orient&&target===0){const aim=lon*radians; yaw+=Math.atan2(Math.sin(aim-yaw),Math.cos(aim-yaw));pitch=lat*radians*.65;}
+    if(orient&&target===0){const aim=lon*radians-scrollAngle; yaw+=Math.atan2(Math.sin(aim-yaw),Math.cos(aim-yaw));pitch=lat*radians*.65;}
   }
   tasks.forEach(([city],i)=>select.add(new Option(city,String(i))));
   select.addEventListener('change',()=>focusCity(Number(select.value)));
@@ -145,7 +152,9 @@
     if(!paused&&!drag&&!target)yaw+=dt*.00016;
     morph=reduced.matches?target:morph+(target-morph)*Math.min(1,dt*.009);
     const mix=morph*morph*(3-2*morph),radius=Math.min(width*(hero?.466:.41),height*(hero?.47:.43)),cx=width/2,cy=height*.50;
-    const sin=Math.sin(yaw),cos=Math.cos(yaw),sp=Math.sin(pitch),cp=Math.cos(pitch);
+    if (hero) scrollAngle = reduced.matches ? 0 : scrollAngle + (scrollTarget - scrollAngle) * Math.min(1, dt * .019);
+    const viewYaw = yaw + scrollAngle;
+    const sin=Math.sin(viewYaw),cos=Math.cos(viewYaw),sp=Math.sin(pitch),cp=Math.cos(pitch);
     function project(v){
       const [x,y,z,lon,lat,k=1]=v,a=x*cos-z*sin,b=x*sin+z*cos;
       const vertical=y*cp-b*sp,depth=y*sp+b*cp;

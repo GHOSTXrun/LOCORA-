@@ -4,17 +4,15 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  pointer-events: auto;
+  pointer-events: none;
   padding: clamp(32px, 6vw, 86px) 0;
   border-block: 1px solid #3e352d;
-  background: radial-gradient(ellipse at 77% 27%, #251912, #12100f 64%);
+  background: transparent;
   color: #fff1e6;
 }
-.story-section canvas { position: absolute; right: 0; top: 0; width: 100%; height: min(480px, 50vw); cursor: grab; touch-action: pan-y; z-index: 0; }
-.story-section canvas:active { cursor: grabbing; }
-.story-section canvas:focus-visible { outline: 1px solid #ff9c70; outline-offset: -4px; }
+.story-section .times-square-canvas { display: none; }
 .story-section .section-inner { max-width: 1500px; padding-inline: clamp(18px, 4vw, 64px); margin-inline: auto; position: relative; pointer-events: none; }
-.story-section .section-intro { position: relative; max-width: 470px; min-height: clamp(225px, 25vw, 350px); }
+.story-section .section-intro { position: relative; max-width: 470px; pointer-events: auto; min-height: clamp(225px, 25vw, 350px); }
 .story-section .eyebrow { color: #ffad87; font-size: .875rem; margin: 0 0 10px; }
 .story-section h2 { font-size: clamp(2.5rem, 4.6vw, 5rem); line-height: .98; letter-spacing: -.035em; font-weight: 400; margin: 0; }
 .story-section h2 em { color: #ff672d; font-style: normal; }
@@ -22,12 +20,17 @@
 .story-section p { color: #c4b9ad; margin-bottom: 0; }
 .story-section .steps {
   margin: 20px 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3,minmax(0,1fr));
-  gap: 1px; border: 1px solid #3e352d; border-radius: 15px; overflow: hidden; background: #3e352d; pointer-events: auto;
+  gap: 1px; border: 1px solid #3e352d; border-radius: 15px; overflow: hidden; background: transparent; pointer-events: auto;
 }
-.story-section .steps li { background: #1a1512; padding: clamp(14px, 2.5vw, 28px); }
+.story-section .steps li { background: #171310b8; padding: clamp(14px, 2.5vw, 28px); }
 .story-section .steps h3 { color: #fff1e6; font: 650 1.125rem/1.35 system-ui, sans-serif; margin: 0 0 6px; }
 @media (max-width: 720px) {
-  .story-section canvas { display: none; }
   .story-section .section-intro { min-height: 0; }
   .story-section .steps { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+
+.story-section .section-intro h2,
+.story-section .section-intro p { text-shadow: 0 2px 8px #0d0c0b, 0 1px 18px #0d0c0b; }
+@media (max-width: 720px) {
+  .story-section .section-inner { padding-top: min(26svh, 190px); }
 }

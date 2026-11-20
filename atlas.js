@@ -6,6 +6,8 @@
   const select=document.querySelector('#cities');
   const hero = panel.hasAttribute('data-hero');
   let ready = false;
+  const brandPin = hero ? new Image() : null;
+  if (brandPin) brandPin.src = new URL('./locora-brand.png', location.href).href;
   let scrollAngle = 0;
   let scrollTarget = 0;
   if (hero) window.addEventListener('message', event => {
@@ -208,6 +210,15 @@
       if(mix>.65){const g=ctx.createLinearGradient(p[0],p[1]-42,p[0],p[1]);g.addColorStop(0,'#ffb06a00');g.addColorStop(1,'#ff762eb0');ctx.fillStyle=g;ctx.beginPath();ctx.moveTo(p[0],p[1]-(hot?48:29));ctx.lineTo(p[0]+7,p[1]);ctx.lineTo(p[0]-7,p[1]);ctx.fill();}
       ctx.strokeStyle='rgba(255,145,67,'+(1-pulse)*.8+')';ctx.lineWidth=1;ctx.beginPath();ctx.arc(p[0],p[1],6+pulse*(hot?19:11),0,tau);ctx.stroke();
       ctx.shadowColor='#ff762e';ctx.shadowBlur=hot?17:8;ctx.fillStyle=hot?'#ffedb9':'#ff833d';ctx.beginPath();ctx.arc(p[0],p[1],hot?5:3.5,0,tau);ctx.fill();ctx.shadowBlur=0;
+      if (brandPin?.complete && brandPin.naturalWidth) {
+        const r = hot ? 14 : 10;
+        ctx.save();
+        ctx.beginPath();ctx.arc(p[0],p[1],r,0,tau);ctx.clip();
+        ctx.drawImage(brandPin,p[0]-r,p[1]-r,r*2,r*2);
+        ctx.restore();
+        ctx.strokeStyle='#ff854c';ctx.lineWidth=1;
+        ctx.beginPath();ctx.arc(p[0],p[1],r,0,tau);ctx.stroke();
+      }
       if(hot||width>600&&[1,2,4,5].includes(i)){ctx.font=(hot?'700 ':'')+'11px system-ui';ctx.fillStyle=hot?'#fff1db':'#d6bfa3';ctx.textAlign=p[0]>width*.78?'right':'left';ctx.fillText(tasks[i][0],p[0]+(p[0]>width*.78?-10:10),p[1]-8);}
     });
     if (hero && !ready) {

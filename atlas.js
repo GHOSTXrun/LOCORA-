@@ -4,9 +4,11 @@
   if(!ctx) return;
   const panel=document.querySelector('#atlas');
   const select=document.querySelector('#cities');
+  const hero = panel.hasAttribute('data-hero');
+  let ready = false;
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   const radians=Math.PI/180, tau=2*Math.PI;
-  let width=0,height=0,dpr=1,yaw=120*radians,pitch=12*radians,morph=0,target=0,selected=0,drag=null,paused=reduced.matches,last=0,visible=true;
+  let width=0,height=0,dpr=1,yaw=(hero?-42:120)*radians,pitch=(hero?23:12)*radians,morph=0,target=0,selected=0,drag=null,paused=reduced.matches,last=0,visible=true;
   const positions=[];
   const stencil=document.createElement('canvas');
   stencil.width=720; stencil.height=360;
@@ -45,9 +47,9 @@
       const y=Math.min(359,Math.floor((.5-lat/Math.PI)*360));
       const land=pixels[(y*720+x)*4+3]>128;
       const light=Math.max(0,depth*.66-a*.25+h*.26);
-      rgba[i]=land?20+light*31:8+light*9;
-      rgba[i+1]=land?26+light*36:12+light*11;
-      rgba[i+2]=land?34+light*44:17+light*16;
+      rgba[i]=land?22+light*40:7+light*11;
+      rgba[i+1]=land?29+light*49:11+light*16;
+      rgba[i+2]=land?38+light*58:17+light*22;
       rgba[i+3]=Math.min(255,depth*3500);
     }
     surface.putImageData(framePixels,0,0);
@@ -124,6 +126,7 @@
     drag=null;
   });
   canvas.addEventListener('pointercancel',()=>{drag=null});
+  canvas.addEventListener('lostpointercapture',()=>{drag=null});
   canvas.addEventListener('keydown',e=>{
     if(target||!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))return;
     e.preventDefault();
@@ -131,14 +134,17 @@
     if(e.key==='ArrowUp')pitch=Math.max(-1,pitch-.12);if(e.key==='ArrowDown')pitch=Math.min(1,pitch+.12);
   });
   focusCity(0,false);
+  let lastDraw = 0;
   function frame(time){
     requestAnimationFrame(frame);
     const dt=Math.min(40,time-last||16);last=time;
-    if(!width||!height||!visible)return;
+    if(!width||!height||!visible||document.hidden)return;
+    if (hero && time < lastDraw + 28) return;
+    lastDraw = time;
     const clock=reduced.matches?0:time;
     if(!paused&&!drag&&!target)yaw+=dt*.00016;
     morph=reduced.matches?target:morph+(target-morph)*Math.min(1,dt*.009);
-    const mix=morph*morph*(3-2*morph),radius=Math.min(width*.41,height*.43),cx=width/2,cy=height*.50;
+    const mix=morph*morph*(3-2*morph),radius=Math.min(width*(hero?.466:.41),height*(hero?.47:.43)),cx=width/2,cy=height*.50;
     const sin=Math.sin(yaw),cos=Math.cos(yaw),sp=Math.sin(pitch),cp=Math.cos(pitch);
     function project(v){
       const [x,y,z,lon,lat,k=1]=v,a=x*cos-z*sin,b=x*sin+z*cos;
@@ -151,14 +157,19 @@
     if(mix<.99){
       const g=ctx.createRadialGradient(cx-radius*.28,cy-radius*.36,5,cx,cy,radius*1.02);
       g.addColorStop(0,'#26241f');g.addColorStop(.76,'#101315');g.addColorStop(1,'#211712');
-      ctx.globalAlpha=1-mix;ctx.fillStyle=g;ctx.strokeStyle='#c3653375';
-      ctx.shadowColor='#a77b5860';ctx.shadowBlur=12;ctx.beginPath();ctx.arc(cx,cy,radius,0,tau);ctx.fill();ctx.shadowBlur=0;ctx.stroke();ctx.globalAlpha=1;
+      ctx.globalAlpha=1-mix;ctx.fillStyle=g;ctx.strokeStyle=hero?'#a2c9efaa':'#c3653375';
+      ctx.shadowColor=hero?'#83c3ffbb':'#a77b5860';ctx.shadowBlur=hero?28:12;ctx.beginPath();ctx.arc(cx,cy,radius,0,tau);ctx.fill();ctx.shadowBlur=0;ctx.stroke();ctx.globalAlpha=1;
     }
     if(mix<.99){
       paintLand(sin,cos,sp,cp);
       ctx.globalAlpha=1-mix;
       ctx.drawImage(sphere,cx-radius,cy-radius,radius*2,radius*2);
       ctx.globalAlpha=1;
+      if (hero) {
+        const light=ctx.createLinearGradient(cx-radius,cy-radius,cx+radius,cy+radius);
+        light.addColorStop(0,'#a2dfff');light.addColorStop(.32,'#78b8d970');light.addColorStop(.74,'#3977a220');light.addColorStop(1,'#0b0e1300');
+        ctx.strokeStyle=light;ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(cx,cy,radius,0,tau);ctx.stroke();
+      }
     }
     if(mix>.4){
       ctx.globalAlpha=Math.max(0,(mix-.4)/.6);
@@ -190,6 +201,10 @@
       ctx.shadowColor='#ff762e';ctx.shadowBlur=hot?17:8;ctx.fillStyle=hot?'#ffedb9':'#ff833d';ctx.beginPath();ctx.arc(p[0],p[1],hot?5:3.5,0,tau);ctx.fill();ctx.shadowBlur=0;
       if(hot||width>600&&[1,2,4,5].includes(i)){ctx.font=(hot?'700 ':'')+'11px system-ui';ctx.fillStyle=hot?'#fff1db':'#d6bfa3';ctx.textAlign=p[0]>width*.78?'right':'left';ctx.fillText(tasks[i][0],p[0]+(p[0]>width*.78?-10:10),p[1]-8);}
     });
+    if (hero && !ready) {
+      ready = true;
+      parent.postMessage('locora-globe-ready', location.origin);
+    }
   }
   requestAnimationFrame(frame);
 })();

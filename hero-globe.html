@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Interactive world globe</title>
+<link rel="stylesheet" href="./hero-globe.css">
+<script defer src="./atlas-land.js"></script><script defer src="./atlas.js?v=globe3"></script>
+</head>
+<body><main id="atlas" data-hero>
+<canvas id="world" tabindex="0" aria-label="Interactive globe. Drag or use the arrow keys to rotate. Click a light to read its sample request."></canvas>
+<div class="hero-globe-controls">
+  <label class="hero-city">City <select id="cities"></select></label>
+  <button type="button" id="spin" aria-pressed="true">Pause rotation</button>
+</div>
+<div class="hero-globe-card" aria-live="polite">
+  <span id="city"></span> <span id="amount"></span>
+  <p id="question"></p>
+  <p id="detail" hidden></p><p id="coordinates" hidden></p>
+</div>
+</main></body></html>

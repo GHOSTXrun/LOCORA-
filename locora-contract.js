@@ -17,23 +17,26 @@
     return bytes + (value.match(/^1+/)?.[0].length || 0) === 32;
   }
   function draw() {
-    if (!address) return;
     for (const button of document.querySelectorAll('.locora-ca')) {
-      button.disabled = false;
-      button.title = address;
-      button.setAttribute('aria-label', `Copy contract address ${address}`);
+      button.disabled = !address;
+      button.title = address || 'Contract address to be announced';
+      button.setAttribute('aria-label', address ? 'Copy contract address ' + address : button.title);
       const status = button.querySelector('strong');
-      if (status && status.textContent !== feedback) status.textContent = feedback;
+      const text = feedback || 'TBA';
+      if (status && status.textContent !== text) status.textContent = text;
     }
   }
   document.addEventListener('click', async event => {
     const button = event.target.closest?.('.locora-ca');
     if (!button || !address) return;
     try {
-      await navigator.clipboard.writeText(address);
+      const copied = address;
+      await navigator.clipboard.writeText(copied);
+      if (address !== copied) return;
       feedback = 'Copied';
       draw();
       setTimeout(() => {
+        if (address !== copied) return;
         feedback = `${address.slice(0, 6)}…${address.slice(-5)}`;
         draw();
       }, 1600);
@@ -41,20 +44,29 @@
       window.prompt('Copy the LOCORA contract address', address);
     }
   });
-  const embedded = document.querySelector('.locora-ca')?.dataset.contractAddress;
-  if (validSolanaAddress(embedded)) {
-    address = embedded;
-    feedback = `${address.slice(0, 6)}…${address.slice(-5)}`;
-    draw();
+  async function refresh() {
+    try {
+      file.searchParams.set('v', String(Math.floor(Date.now() / 10000)));
+      const response = await fetch(file, { cache: 'no-store', signal: AbortSignal.timeout(7000) });
+      if (response.ok) {
+        const config = await response.json();
+        if (config?.address === null || validSolanaAddress(config?.address)) {
+          const next = config.address || undefined;
+          if (next !== address) {
+            address = next;
+            feedback = address ? address.slice(0, 6) + '…' + address.slice(-5) : undefined;
+          }
+          draw();
+        }
+      }
+    } catch {
+      // Retain the current state and try again after a transient error.
+    } finally {
+      setTimeout(refresh, 10000);
+    }
   }
-  fetch(file, {cache:'no-store'})
-    .then(response => response.ok ? response.json() : null)
-    .then(config => {
-      if (!validSolanaAddress(config?.address)) return;
-      address = config.address;
-      feedback = `${address.slice(0, 6)}…${address.slice(-5)}`;
-      draw();
-      new MutationObserver(draw).observe(document.body, {subtree:true,childList:true});
-    })
-    .catch(() => {});
+
+  new MutationObserver(draw).observe(document.body, { subtree: true, childList: true });
+  draw();
+  refresh();
 })();
